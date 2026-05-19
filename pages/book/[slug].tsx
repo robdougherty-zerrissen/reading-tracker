@@ -71,7 +71,7 @@ export default function BookPage({ book, days: initialDays, checkedCount: initia
   }
 
   const totalDays = days.length
-  const percentComplete = Math.round(((book.current_page - 1) / book.total_pages) * 100)
+  const percentComplete = totalDays > 0 ? Math.round((checkedCount / totalDays) * 100) : 0
 
   return (
     <>
