@@ -3,6 +3,24 @@
   background: #f5f0e8;
 }
 
+.backLink {
+  display: inline-block;
+  position: fixed;
+  top: 1.2rem;
+  left: 1.5rem;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  color: #a07830;
+  z-index: 100;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+  background: rgba(245, 240, 232, 0.9);
+  padding: 0.3rem 0.6rem;
+  border: 1px solid rgba(160, 120, 48, 0.35);
+}
+.backLink:hover { opacity: 1; }
+
 .header {
   text-align: center;
   padding: 3rem 2rem 0;

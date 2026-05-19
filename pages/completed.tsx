@@ -22,6 +22,7 @@ export default function CompletedPage({ completedBooks, bookCount, totalPages, a
       </Head>
 
       <div className={styles.page}>
+        <Link href="/" className={styles.backLink}>← Reading Journal</Link>
         <header className={styles.header}>
           <div className={styles.ornament}>❧</div>
           <h1 className={styles.siteTitle}>Reading Journal</h1>
