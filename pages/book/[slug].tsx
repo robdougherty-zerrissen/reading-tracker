@@ -30,15 +30,17 @@ export default function BookPage({ book, days: initialDays, checkedCount: initia
   const toggleDay = useCallback(async (dayId: string, currentChecked: boolean) => {
     const newChecked = !currentChecked
 
-    // Optimistic update
-    setDays(prev => prev.map(d =>
+    const updatedDays = days.map(d =>
       d.id === dayId
         ? { ...d, progress: { ...d.progress!, checked: newChecked } }
         : d
-    ))
+    )
+    setDays(updatedDays)
     setCheckedCount(prev => prev + (newChecked ? 1 : -1))
 
-    // Persist to Supabase
+    const lastCheckedDay = updatedDays.filter(d => d.progress?.checked).at(-1)
+    const newCurrentPage = lastCheckedDay?.pages_end ?? 1
+
     const { error } = await supabase
       .from('reading_progress')
       .upsert({
@@ -49,16 +51,17 @@ export default function BookPage({ book, days: initialDays, checkedCount: initia
       }, { onConflict: 'book_id,day_id' })
 
     if (error) {
-      // Revert on error
-      setDays(prev => prev.map(d =>
-        d.id === dayId
-          ? { ...d, progress: { ...d.progress!, checked: currentChecked } }
-          : d
-      ))
+      setDays(days)
       setCheckedCount(prev => prev + (newChecked ? -1 : 1))
       console.error('Failed to save progress:', error)
+      return
     }
-  }, [book.id])
+
+    await supabase
+      .from('books')
+      .update({ current_page: newCurrentPage })
+      .eq('id', book.id)
+  }, [book.id, days])
 
   const handleMarkComplete = async () => {
     if (!confirm(`Mark "${book.title}" as completed? It will move to your Completed books list.`)) return
@@ -71,7 +74,8 @@ export default function BookPage({ book, days: initialDays, checkedCount: initia
   }
 
   const totalDays = days.length
-  const percentComplete = totalDays > 0 ? Math.round((checkedCount / totalDays) * 100) : 0
+  const lastCheckedDay = days.filter(d => d.progress?.checked).at(-1)
+  const percentComplete = lastCheckedDay?.percent_done ?? 0
 
   return (
     <>
