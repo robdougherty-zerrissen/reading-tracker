@@ -60,8 +60,8 @@ export default function Home({ activeBooks }: Props) {
 
 function BookCard({ book, index }: { book: BookWithProgress; index: number }) {
   const theme = book.theme as any
-  const todayStr = new Date().toISOString().split('T')[0]
-  const todaySchedule = book.schedule_days?.find(d => d.date === todayStr)
+  const nashvilleDate = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Chicago' })
+  const todaySchedule = book.schedule_days?.find(d => d.date === nashvilleDate)
 
   return (
     <article

@@ -264,13 +264,13 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     .select('*')
     .eq('book_id', book.id)
 
-  const todayStr = new Date().toISOString().split('T')[0]
+  const nashvilleDate = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Chicago' })
 
   const days: DayWithProgress[] = (schedule || []).map(day => ({
     ...day,
     progress: progress?.find(p => p.day_id === day.id) || null,
-    isToday: day.date === todayStr,
-    isPast: day.date < todayStr,
+    isToday: day.date === nashvilleDate,
+    isPast: day.date < nashvilleDate,
   }))
 
   const checkedCount = progress?.filter(p => p.checked).length || 0
