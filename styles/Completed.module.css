@@ -44,9 +44,86 @@
 .navDot { color: rgba(160, 120, 48, 0.3); }
 
 .main {
-  max-width: 700px;
+  max-width: 980px;
   margin: 0 auto;
   padding: 3rem 2rem 5rem;
+}
+
+.contentWrapper {
+  display: flex;
+  gap: 3rem;
+  align-items: flex-start;
+}
+
+.statsPanel {
+  width: 130px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 1.4rem 1rem;
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(160, 120, 48, 0.2);
+  border-radius: 1px;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0.8rem 0;
+  gap: 0.3rem;
+}
+
+.statNumber {
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: #a07830;
+  line-height: 1;
+}
+
+.statLabel {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(28, 20, 16, 0.5);
+  white-space: pre-line;
+  line-height: 1.4;
+}
+
+.statRule {
+  width: 40%;
+  height: 1px;
+  background: rgba(160, 120, 48, 0.2);
+  margin: 0 auto;
+}
+
+.timelineArea {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 640px) {
+  .contentWrapper {
+    flex-direction: column;
+  }
+  .statsPanel {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-around;
+    position: static;
+    padding: 1rem;
+  }
+  .statRule {
+    width: 1px;
+    height: auto;
+    margin: 0;
+  }
 }
 
 .yearLabel {

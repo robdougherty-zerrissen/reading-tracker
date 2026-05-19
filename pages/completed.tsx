@@ -6,9 +6,12 @@ import styles from '../styles/Completed.module.css'
 
 type Props = {
   completedBooks: Book[]
+  bookCount: number
+  totalPages: number
+  avgPagesPerDay: number
 }
 
-export default function CompletedPage({ completedBooks }: Props) {
+export default function CompletedPage({ completedBooks, bookCount, totalPages, avgPagesPerDay }: Props) {
   return (
     <>
       <Head>
@@ -30,19 +33,39 @@ export default function CompletedPage({ completedBooks }: Props) {
         </header>
 
         <main className={styles.main}>
-          <div className={styles.yearLabel}>2026</div>
+          <div className={styles.contentWrapper}>
+            <aside className={styles.statsPanel}>
+              <div className={styles.statItem}>
+                <span className={styles.statNumber}>{bookCount}</span>
+                <span className={styles.statLabel}>Books{'\n'}Completed</span>
+              </div>
+              <div className={styles.statRule} />
+              <div className={styles.statItem}>
+                <span className={styles.statNumber}>{totalPages.toLocaleString()}</span>
+                <span className={styles.statLabel}>Total{'\n'}Pages</span>
+              </div>
+              <div className={styles.statRule} />
+              <div className={styles.statItem}>
+                <span className={styles.statNumber}>{avgPagesPerDay}</span>
+                <span className={styles.statLabel}>Avg Pages{'\n'}per Day</span>
+              </div>
+            </aside>
 
-          {completedBooks.length === 0 ? (
-            <div className={styles.empty}>
-              <p>No completed books yet — keep reading.</p>
+            <div className={styles.timelineArea}>
+              <div className={styles.yearLabel}>2026</div>
+              {completedBooks.length === 0 ? (
+                <div className={styles.empty}>
+                  <p>No completed books yet — keep reading.</p>
+                </div>
+              ) : (
+                <div className={styles.timeline}>
+                  {completedBooks.map((book, i) => (
+                    <CompletedCard key={book.id} book={book} index={i} />
+                  ))}
+                </div>
+              )}
             </div>
-          ) : (
-            <div className={styles.timeline}>
-              {completedBooks.map((book, i) => (
-                <CompletedCard key={book.id} book={book} index={i} />
-              ))}
-            </div>
-          )}
+          </div>
         </main>
 
         <footer className={styles.footer}>— ❦ —</footer>
@@ -93,5 +116,15 @@ export const getServerSideProps: GetServerSideProps = async () => {
     .eq('status', 'completed')
     .order('completed_date', { ascending: false })
 
-  return { props: { completedBooks: completedBooks || [] } }
+  const books = completedBooks || []
+  const bookCount = books.length
+  const totalPages = books.reduce((sum, b) => sum + (b.total_pages || 0), 0)
+
+  const nashvilleToday = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Chicago' })
+  const startOfYear = new Date('2026-01-01T00:00:00')
+  const todayDate = new Date(nashvilleToday + 'T00:00:00')
+  const daysElapsed = Math.floor((todayDate.getTime() - startOfYear.getTime()) / (1000 * 60 * 60 * 24)) + 1
+  const avgPagesPerDay = daysElapsed > 0 ? Math.round(totalPages / daysElapsed) : 0
+
+  return { props: { completedBooks: books, bookCount, totalPages, avgPagesPerDay } }
 }
