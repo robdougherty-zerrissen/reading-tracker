@@ -158,7 +158,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
       const checkedCount = progress?.filter(p => p.checked).length || 0
       const totalDays = schedule?.length || 0
-      const percentComplete = Math.round(((book.current_page - 1) / book.total_pages) * 100)
+      const percentComplete = Math.round((book.current_page / book.total_pages) * 100)
 
       return {
         ...book,

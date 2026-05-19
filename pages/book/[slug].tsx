@@ -39,7 +39,7 @@ export default function BookPage({ book, days: initialDays, checkedCount: initia
     setCheckedCount(prev => prev + (newChecked ? 1 : -1))
 
     const lastCheckedDay = updatedDays.filter(d => d.progress?.checked).at(-1)
-    const newCurrentPage = lastCheckedDay?.pages_end ?? 1
+    const newCurrentPage = lastCheckedDay?.pages_end ?? (updatedDays[0]?.pages_start ?? 1) - 1
 
     const { error } = await supabase
       .from('reading_progress')
@@ -75,7 +75,9 @@ export default function BookPage({ book, days: initialDays, checkedCount: initia
 
   const totalDays = days.length
   const lastCheckedDay = days.filter(d => d.progress?.checked).at(-1)
-  const percentComplete = lastCheckedDay?.percent_done ?? 0
+  const percentComplete = lastCheckedDay
+    ? Math.round((lastCheckedDay.pages_end / book.total_pages) * 100)
+    : Math.round(((days[0]?.pages_start ?? 1) - 1) / book.total_pages * 100)
 
   return (
     <>
