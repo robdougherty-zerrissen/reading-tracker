@@ -1,0 +1,416 @@
+/* ================================================
+   PAGE SHELL
+================================================ */
+.page {
+  min-height: 100vh;
+  background: var(--paper, #f5f0e8);
+}
+
+.pageLichtspiel {
+  background: linear-gradient(180deg, #f5ede0 0%, #ede5cc 100%);
+}
+
+.pageWoT {
+  background: linear-gradient(180deg, #f7f0e3 0%, #ede5cc 100%);
+}
+
+/* ================================================
+   BACK LINK
+================================================ */
+.backLink {
+  display: inline-block;
+  position: fixed;
+  top: 1.2rem;
+  left: 1.5rem;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  color: var(--card-accent);
+  z-index: 100;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+  background: rgba(245, 240, 232, 0.9);
+  padding: 0.3rem 0.6rem;
+  border: 1px solid var(--card-border);
+}
+.backLink:hover { opacity: 1; }
+
+/* ================================================
+   HEADER
+================================================ */
+.header {
+  padding: 3.5rem 2rem 2rem;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  position: relative;
+}
+
+.filmStrip {
+  height: 8px;
+  background: repeating-linear-gradient(
+    90deg,
+    #1a1208 0px, #1a1208 20px,
+    #c9a84c 20px, #c9a84c 22px,
+    #1a1208 22px, #1a1208 42px,
+    transparent 42px, transparent 48px
+  );
+}
+
+.wotRule {
+  height: 6px;
+  background: linear-gradient(90deg, #5c3317, #8b6914, #c9a84c, #8b6914, #5c3317);
+  margin-top: 1.5rem;
+}
+
+.headerContent {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  max-width: 860px;
+  margin: 1.5rem auto 0;
+}
+
+.headerCover {
+  width: 110px;
+  height: 165px;
+  object-fit: cover;
+  border-radius: 1px;
+  box-shadow: 4px 4px 16px rgba(0,0,0,0.25), -1px 0 0 rgba(0,0,0,0.1);
+  flex-shrink: 0;
+}
+
+.headerText { flex: 1; }
+
+.headerGenre {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--card-accent);
+  margin-bottom: 0.4rem;
+}
+
+.headerTitle {
+  font-family: var(--card-font-display, 'Playfair Display', Georgia, serif);
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 600;
+  color: var(--card-text);
+  line-height: 1.1;
+  margin-bottom: 0.3rem;
+}
+
+.headerAuthor {
+  font-family: var(--card-font-body, 'EB Garamond', Georgia, serif);
+  font-size: 1.15rem;
+  font-style: italic;
+  color: var(--card-text-light);
+  margin-bottom: 0.2rem;
+}
+
+.headerSeries {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.85rem;
+  color: var(--card-accent2);
+  font-style: italic;
+}
+
+/* ================================================
+   SUMMARY BAR
+================================================ */
+.summaryBar {
+  max-width: 860px;
+  margin: 1.8rem auto 0;
+}
+
+.summaryStats {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.summaryStat {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+}
+
+.summaryNum {
+  font-family: var(--card-font-display, Georgia, serif);
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--card-accent);
+}
+
+.summaryOf {
+  font-family: var(--card-font-body, Georgia, serif);
+  font-size: 1rem;
+  color: var(--card-text-light);
+}
+
+.summaryLabel {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--card-text-light);
+  margin-left: 0.2rem;
+}
+
+.summaryDivider {
+  color: var(--card-border);
+  opacity: 0.4;
+  font-size: 1.2rem;
+}
+
+.summaryTrack {
+  height: 6px;
+  background: rgba(0,0,0,0.07);
+  border-radius: 1px;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+.summaryFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--card-accent2), var(--card-accent));
+  transition: width 0.8s ease;
+}
+
+/* ================================================
+   MAIN / CHECKLIST
+================================================ */
+.main {
+  padding: 2.5rem 2rem 4rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.checklistWrapper {
+  background: rgba(255,255,255,0.35);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+/* Column headers */
+.colHeaders {
+  display: grid;
+  grid-template-columns: 44px 130px 1fr 130px 64px 100px;
+  gap: 0;
+  padding: 0.7rem 1rem;
+  background: var(--card-accent);
+  color: rgba(255,255,255,0.9);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.colCheck { text-align: center; }
+.colDate, .colChapters, .colPages, .colPp { }
+.colPct { text-align: right; }
+
+/* ================================================
+   DAY ROW
+================================================ */
+.dayRow {
+  display: grid;
+  grid-template-columns: 44px 130px 1fr 130px 64px 100px;
+  gap: 0;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  align-items: center;
+  animation: fadeUp 0.4s ease both;
+  transition: background 0.15s;
+  cursor: pointer;
+}
+.dayRow:last-child { border-bottom: none; }
+.dayRow:hover { background: rgba(0,0,0,0.025); }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Checked state */
+.dayChecked {
+  background: rgba(0,0,0,0.02);
+}
+.dayChecked .rowChapters,
+.dayChecked .rowDate,
+.dayChecked .dateText {
+  text-decoration: line-through;
+  opacity: 0.45;
+  text-decoration-color: var(--card-accent);
+}
+
+/* Today */
+.dayToday {
+  background: rgba(0,0,0,0.04);
+  border-left: 3px solid var(--card-accent);
+}
+
+/* Overdue */
+.dayOverdue { background: rgba(139, 26, 26, 0.04); }
+
+/* ================================================
+   CHECKBOX
+================================================ */
+.checkbox {
+  width: 26px;
+  height: 26px;
+  border: 1.5px solid var(--card-border);
+  background: rgba(255,255,255,0.6);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1px;
+  transition: background 0.15s, border-color 0.15s;
+  margin: 0 auto;
+  flex-shrink: 0;
+}
+.checkbox:hover {
+  background: rgba(255,255,255,0.9);
+  border-color: var(--card-accent);
+}
+.dayChecked .checkbox {
+  background: var(--card-accent);
+  border-color: var(--card-accent);
+}
+
+.checkmark {
+  font-size: 0.85rem;
+  color: #fff;
+  line-height: 1;
+}
+
+/* ================================================
+   ROW CELLS
+================================================ */
+.rowDate {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.todayPill {
+  display: inline-block;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  background: var(--card-accent);
+  color: #fff;
+  padding: 0.1rem 0.4rem;
+  border-radius: 1px;
+  width: fit-content;
+}
+
+.dateText {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.9rem;
+  color: var(--card-text-light);
+}
+
+.rowChapters {
+  font-family: var(--card-font-body, 'EB Garamond', Georgia, serif);
+  font-size: 0.95rem;
+  color: var(--card-text);
+  line-height: 1.3;
+  padding-right: 0.5rem;
+}
+
+.rowPages {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.88rem;
+  color: var(--card-text-light);
+}
+
+.rowPp {
+  font-family: var(--card-font-display, Georgia, serif);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--card-accent);
+  text-align: center;
+}
+
+.rowPct {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+
+.pctNum {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.82rem;
+  color: var(--card-text-light);
+}
+
+.miniBar {
+  width: 60px;
+  height: 3px;
+  background: rgba(0,0,0,0.1);
+  border-radius: 1px;
+  overflow: hidden;
+}
+.miniBarFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--card-accent2), var(--card-accent));
+}
+
+/* ================================================
+   BOTTOM SECTION
+================================================ */
+.bottomSection {
+  padding: 1.5rem;
+  text-align: center;
+  border-top: 1px solid rgba(0,0,0,0.08);
+}
+
+.colophon {
+  font-family: var(--card-font-body, 'EB Garamond', Georgia, serif);
+  font-size: 0.95rem;
+  color: var(--card-text-light);
+  font-style: italic;
+  margin-bottom: 1rem;
+  opacity: 0.7;
+}
+
+.completeBtn {
+  background: var(--card-accent);
+  color: #fff;
+  border: none;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1rem;
+  letter-spacing: 0.12em;
+  padding: 0.75rem 2rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  border-radius: 1px;
+}
+.completeBtn:hover {
+  background: var(--card-accent2);
+  transform: translateY(-1px);
+}
+.completeBtn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ================================================
+   RESPONSIVE
+================================================ */
+@media (max-width: 700px) {
+  .colHeaders {
+    grid-template-columns: 40px 1fr 60px 50px;
+    font-size: 0.65rem;
+  }
+  .colChapters, .colPages { display: none; }
+
+  .dayRow {
+    grid-template-columns: 40px 1fr 60px 50px;
+  }
+  .rowChapters, .rowPages { display: none; }
+
+  .headerContent { flex-direction: column; }
+  .headerCover { width: 80px; height: 120px; }
+}
