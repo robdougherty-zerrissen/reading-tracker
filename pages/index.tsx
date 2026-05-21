@@ -63,6 +63,29 @@ function BookCard({ book, index }: { book: BookWithProgress; index: number }) {
   const nashvilleDate = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Chicago' })
   const todaySchedule = book.schedule_days?.find(d => d.date === nashvilleDate)
 
+  const checkedIds = new Set(
+    book.reading_progress?.filter(p => p.checked).map(p => p.day_id) ?? []
+  )
+  const dueDays = book.schedule_days?.filter(d => d.date <= nashvilleDate) ?? []
+  const pastDays = book.schedule_days?.filter(d => d.date < nashvilleDate) ?? []
+  const uncheckedPastDays = pastDays.filter(d => !checkedIds.has(d.id))
+  const daysBehind = uncheckedPastDays.length
+  const daysAhead = book.checkedCount - dueDays.length
+
+  let badgeStatus: 'today' | 'upToDate' | 'ahead' | 'behind' | null = null
+  if (daysBehind > 0) {
+    badgeStatus = 'behind'
+  } else if (daysAhead > 0) {
+    badgeStatus = 'ahead'
+  } else if (todaySchedule) {
+    badgeStatus = checkedIds.has(todaySchedule.id) ? 'upToDate' : 'today'
+  }
+
+  const catchUpDays = uncheckedPastDays
+  const catchUpStart = catchUpDays[0]?.pages_start
+  const catchUpEnd = catchUpDays[catchUpDays.length - 1]?.pages_end
+  const catchUpPages = catchUpDays.reduce((sum, d) => sum + (d.pages_count ?? 0), 0)
+
   return (
     <article
       className={`${styles.bookCard} ${book.slug === 'lichtspiel' ? styles.cardLichtspiel : ''} ${book.slug === 'crossroads-of-twilight' ? styles.cardWoT : ''}`}
@@ -98,13 +121,38 @@ function BookCard({ book, index }: { book: BookWithProgress; index: number }) {
             <p className={styles.bookAuthor}>{book.author}</p>
             <p className={styles.bookVibe}>{book.vibe_notes?.split('.')[0]}</p>
 
-            {todaySchedule && (
-              <div className={styles.todayBadge}>
-                <span className={styles.todayLabel}>Today</span>
-                <span className={styles.todayText}>
-                  pp. {todaySchedule.pages_start}–{todaySchedule.pages_end}
-                  <em> · {todaySchedule.pages_count} pages</em>
-                </span>
+            {badgeStatus && (
+              <div className={`${styles.todayBadge}${badgeStatus === 'behind' ? ` ${styles.todayBadgeBehind}` : ''}${badgeStatus === 'ahead' ? ` ${styles.todayBadgeAhead}` : ''}`}>
+                {badgeStatus === 'today' && (
+                  <>
+                    <span className={styles.todayLabel}>Today</span>
+                    <span className={styles.todayText}>
+                      pp. {todaySchedule!.pages_start}–{todaySchedule!.pages_end}
+                      <em> · {todaySchedule!.pages_count} pages</em>
+                    </span>
+                  </>
+                )}
+                {badgeStatus === 'upToDate' && (
+                  <>
+                    <span className={styles.todayLabel}>Today</span>
+                    <span className={styles.todayText}>Up to date ✓</span>
+                  </>
+                )}
+                {badgeStatus === 'ahead' && (
+                  <>
+                    <span className={styles.todayLabel}>Ahead</span>
+                    <span className={styles.todayText}>{daysAhead} day{daysAhead !== 1 ? 's' : ''} ahead of schedule</span>
+                  </>
+                )}
+                {badgeStatus === 'behind' && (
+                  <>
+                    <span className={styles.todayLabel}>{daysBehind} day{daysBehind !== 1 ? 's' : ''} behind</span>
+                    <span className={styles.todayText}>
+                      pp. {catchUpStart}–{catchUpEnd}
+                      <em> · {catchUpPages} pages to catch up</em>
+                    </span>
+                  </>
+                )}
               </div>
             )}
           </div>

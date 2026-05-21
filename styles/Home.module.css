@@ -297,6 +297,12 @@
   opacity: 0.8;
   font-weight: 400;
 }
+.todayBadgeBehind {
+  background: #7a1f1f;
+}
+.todayBadgeAhead {
+  background: #2d5a27;
+}
 
 /* ================================================
    CARD RULE
