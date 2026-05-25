@@ -39,6 +39,8 @@ export default function Home({ activeBooks }: Props) {
             <Link href="/" className={`${styles.navLink} ${styles.navActive}`}>Currently Reading</Link>
             <span className={styles.navDot}>·</span>
             <Link href="/completed" className={styles.navLink}>Completed This Year</Link>
+            <span className={styles.navDot}>·</span>
+            <Link href="/tbr" className={styles.navLink}>To Be Read</Link>
           </nav>
         </header>
 

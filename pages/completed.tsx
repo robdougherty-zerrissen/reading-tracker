@@ -30,6 +30,8 @@ export default function CompletedPage({ completedBooks, bookCount, totalPages, a
             <Link href="/" className={styles.navLink}>Currently Reading</Link>
             <span className={styles.navDot}>·</span>
             <Link href="/completed" className={`${styles.navLink} ${styles.navActive}`}>Completed This Year</Link>
+            <span className={styles.navDot}>·</span>
+            <Link href="/tbr" className={styles.navLink}>To Be Read</Link>
           </nav>
         </header>
 

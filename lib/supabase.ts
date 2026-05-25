@@ -49,3 +49,13 @@ export type ReadingProgress = {
   day_id: string
   checked: boolean
 }
+
+export type TbrItem = {
+  id: string
+  title: string
+  author: string
+  genre: string
+  sort_order: number
+  notes: string | null
+  created_at: string
+}
