@@ -170,6 +170,7 @@ function BookCard({ book, index }: { book: BookWithProgress; index: number }) {
           </div>
           <div className={styles.progressStats}>
             <span>p. {book.current_page} of {book.total_pages}</span>
+            <span>{book.total_pages - book.current_page} pages remaining</span>
             <span>{book.checkedCount} / {book.totalDays} days complete</span>
           </div>
         </div>
