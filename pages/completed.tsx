@@ -1,7 +1,7 @@
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
-import { supabase, Book } from '../lib/supabase'
+import { supabase, Book, formatRuntime } from '../lib/supabase'
 import styles from '../styles/Completed.module.css'
 
 type Props = {
@@ -9,9 +9,10 @@ type Props = {
   bookCount: number
   totalPages: number
   avgPagesPerDay: number
+  hoursListened: number
 }
 
-export default function CompletedPage({ completedBooks, bookCount, totalPages, avgPagesPerDay }: Props) {
+export default function CompletedPage({ completedBooks, bookCount, totalPages, avgPagesPerDay, hoursListened }: Props) {
   return (
     <>
       <Head>
@@ -52,6 +53,15 @@ export default function CompletedPage({ completedBooks, bookCount, totalPages, a
                 <span className={styles.statNumber}>{avgPagesPerDay}</span>
                 <span className={styles.statLabel}>Avg Pages{'\n'}per Day</span>
               </div>
+              {hoursListened > 0 && (
+                <>
+                  <div className={styles.statRule} />
+                  <div className={styles.statItem}>
+                    <span className={styles.statNumber}>{hoursListened}</span>
+                    <span className={styles.statLabel}>Hours{'\n'}Listened</span>
+                  </div>
+                </>
+              )}
             </aside>
 
             <div className={styles.timelineArea}>
@@ -105,7 +115,11 @@ function CompletedCard({ book, index }: { book: Book; index: number }) {
           <h2 className={styles.title}>{book.title}</h2>
           <p className={styles.author}>{book.author}</p>
           <p className={styles.genre}>{book.genre}</p>
-          <div className={styles.badge}>✓ Finished · {book.total_pages} pages</div>
+          <div className={styles.badge}>
+            ✓ Finished · {book.format === 'audiobook'
+              ? formatRuntime(book.total_minutes)
+              : `${book.total_pages} pages`}
+          </div>
         </div>
       </div>
     </div>
@@ -121,7 +135,14 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
   const books = completedBooks || []
   const bookCount = books.length
-  const totalPages = books.reduce((sum, b) => sum + (b.total_pages || 0), 0)
+
+  // Page stats count print books only; audiobooks contribute hours instead.
+  const printBooks = books.filter((b) => b.format !== 'audiobook')
+  const totalPages = printBooks.reduce((sum, b) => sum + (b.total_pages || 0), 0)
+  const totalMinutes = books
+    .filter((b) => b.format === 'audiobook')
+    .reduce((sum, b) => sum + (b.total_minutes || 0), 0)
+  const hoursListened = Math.round(totalMinutes / 60)
 
   const nashvilleToday = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Chicago' })
   const startOfYear = new Date('2026-01-01T00:00:00')
@@ -129,5 +150,5 @@ export const getServerSideProps: GetServerSideProps = async () => {
   const daysElapsed = Math.floor((todayDate.getTime() - startOfYear.getTime()) / (1000 * 60 * 60 * 24)) + 1
   const avgPagesPerDay = daysElapsed > 0 ? Math.round(totalPages / daysElapsed) : 0
 
-  return { props: { completedBooks: books, bookCount, totalPages, avgPagesPerDay } }
+  return { props: { completedBooks: books, bookCount, totalPages, avgPagesPerDay, hoursListened } }
 }

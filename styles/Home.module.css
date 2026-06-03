@@ -395,6 +395,76 @@
 }
 
 /* ================================================
+   SECTION HEADING (e.g. Audiobooks)
+================================================ */
+.sectionHeading {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 3.5rem 0 2rem;
+}
+.sectionHeading::before,
+.sectionHeading::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(201, 168, 76, 0.3);
+}
+.sectionHeadingText {
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 1.1rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  white-space: nowrap;
+}
+
+/* ================================================
+   AUDIOBOOK META + ACTIONS
+================================================ */
+.audioMeta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--card-accent);
+}
+.headphonesIcon {
+  width: 1.15rem;
+  height: 1.15rem;
+  opacity: 0.85;
+  flex-shrink: 0;
+}
+.audioRuntime {
+  font-family: var(--card-font-body, Georgia, serif);
+  font-size: 0.85rem;
+  color: var(--card-text-light);
+}
+
+.markCompleteBtn {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  color: var(--card-accent);
+  background: transparent;
+  border: 1px solid var(--card-border);
+  padding: 0.6rem 1rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.markCompleteBtn:hover {
+  background: var(--card-accent);
+  color: #fff;
+}
+.markCompleteBtn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* ================================================
    FOOTER
 ================================================ */
 .footer {

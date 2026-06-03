@@ -75,9 +75,10 @@ export default function BookPage({ book, days: initialDays, checkedCount: initia
 
   const totalDays = days.length
   const lastCheckedDay = days.filter(d => d.progress?.checked).at(-1)
+  const totalPages = book.total_pages ?? 1
   const percentComplete = lastCheckedDay
-    ? Math.round((lastCheckedDay.pages_end / book.total_pages) * 100)
-    : Math.round(((days[0]?.pages_start ?? 1) - 1) / book.total_pages * 100)
+    ? Math.round((lastCheckedDay.pages_end / totalPages) * 100)
+    : Math.round(((days[0]?.pages_start ?? 1) - 1) / totalPages * 100)
 
   return (
     <>
@@ -258,6 +259,11 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     .single()
 
   if (!book) return { notFound: true }
+
+  // Audiobooks have no detail page — send them back to the home page.
+  if (book.format === 'audiobook') {
+    return { redirect: { destination: '/', permanent: false } }
+  }
 
   const { data: schedule } = await supabase
     .from('schedule_days')

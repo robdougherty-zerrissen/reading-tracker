@@ -2,7 +2,15 @@
 
 Adds a new book to the reading tracker by inserting rows into Supabase.
 
-## What you need from the user
+## First: print book or audiobook?
+
+Ask the user which format this is (or infer it if they say "audiobook").
+
+- **Print book** → follow the full flow below (books row + reading schedule).
+- **Audiobook** → jump to the [Audiobooks](#audiobooks) section. Audiobooks are
+  much simpler: one `books` row, no schedule, no checklist, no page tracking.
+
+## What you need from the user (print books)
 
 Ask for anything not provided:
 
@@ -121,3 +129,62 @@ UPDATE books SET cover_image_path = '/covers/<filename>' WHERE slug = '<slug>';
 ## After inserting
 
 Tell the user the book is live on the home page. Offer to commit and push to origin and vercel if they want.
+
+## Audiobooks
+
+Audiobooks appear **only** on the Currently Reading and Completed pages. They have
+no reading schedule, no daily checklist, and no page tracking — the card just shows
+that this is the current listen. Do **not** insert `schedule_days` or
+`reading_progress` rows for an audiobook.
+
+### What you need from the user
+
+- **Title** and **Author**
+- **Genre** — short label shown on card
+- **Vibe notes** — one or two sentences; first sentence appears on the card
+- **Runtime** — total hours and minutes. Research it off the web (Audible, the
+  publisher's page, etc.) if the user doesn't give it.
+- **Cover image** — optional
+
+### Insert (single row, no schedule)
+
+Convert the runtime to total minutes: `hours * 60 + minutes` (e.g. 9h 32m → 572).
+
+```sql
+INSERT INTO books (
+  slug, title, author, genre, vibe_notes,
+  format, total_minutes, status, cover_image_path, theme
+)
+VALUES (
+  '<slug>',
+  '<Title>',
+  '<Author>',
+  '<Genre>',
+  '<Vibe notes.>',
+  'audiobook',
+  <total_minutes>,   -- hours * 60 + minutes
+  'active',
+  NULL,              -- or '/covers/<filename>'
+  '<theme_json>'     -- same shape and font options as print books
+);
+```
+
+Leave `total_pages` and `current_page` unset (they default to NULL for audiobooks).
+Pick a theme the same way as print books (see the table above).
+
+### Finishing an audiobook
+
+There is no checklist to complete. The user clicks **Mark as Complete** on the
+audiobook card on the Currently Reading page, which sets `status = 'completed'` and
+`completed_date`. If doing it by hand:
+
+```sql
+UPDATE books
+SET status = 'completed', completed_date = CURRENT_DATE
+WHERE slug = '<slug>';
+```
+
+### Note on the schema migration
+
+Audiobook support requires the `format` and `total_minutes` columns on `books`. If
+they don't exist yet, run `sql/add-audiobooks-migration.sql` once first.

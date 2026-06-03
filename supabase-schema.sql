@@ -12,7 +12,9 @@ CREATE TABLE books (
   cover_image_path TEXT,
   status TEXT DEFAULT 'active' CHECK (status IN ('active', 'completed')),
   completed_date DATE,
-  total_pages INTEGER NOT NULL,
+  format TEXT NOT NULL DEFAULT 'print' CHECK (format IN ('print', 'audiobook')),
+  total_pages INTEGER,                -- required for print books; NULL for audiobooks
+  total_minutes INTEGER,              -- audiobook runtime in minutes; NULL for print books
   current_page INTEGER DEFAULT 1,
   theme JSONB NOT NULL DEFAULT '{}',
   created_at TIMESTAMPTZ DEFAULT NOW()

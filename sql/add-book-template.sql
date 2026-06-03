@@ -98,3 +98,55 @@ SELECT
 FROM schedule_days
 WHERE book_id = (SELECT id FROM books WHERE slug = '<slug>')
 ORDER BY day_number;
+
+
+-- ============================================================
+-- AUDIOBOOK VARIANT — a single block, no schedule
+-- ============================================================
+-- Audiobooks only appear on the Currently Reading and Completed
+-- pages. They have NO reading schedule, NO daily checklist, and
+-- NO page tracking. Set format = 'audiobook', leave total_pages /
+-- current_page NULL, and fill total_minutes with the runtime.
+--
+-- Convert the runtime to total minutes:  hours * 60 + minutes
+--   e.g. 9h 32m  ->  9 * 60 + 32  =  572
+-- Research the runtime off the web (Audible, publisher, etc.).
+--
+-- DO NOT insert any schedule_days or reading_progress rows.
+-- To finish an audiobook later, click "Mark as Complete" on its
+-- card (or set status='completed', completed_date=CURRENT_DATE).
+-- ============================================================
+
+INSERT INTO books (
+  slug,
+  title,
+  author,
+  genre,
+  vibe_notes,
+  format,           -- 'audiobook'
+  total_minutes,    -- runtime in minutes: hours * 60 + minutes
+  status,           -- 'active' to show on Currently Reading
+  cover_image_path, -- '/covers/my-cover.jpg' or NULL
+  theme             -- same JSON shape as print books (controls card colors/fonts)
+)
+VALUES (
+  '<slug>',
+  '<Title>',
+  '<Author>',
+  '<Genre>',
+  '<Vibe notes.>',
+  'audiobook',
+  <total_minutes>,
+  'active',
+  NULL,
+  '{
+    "card_bg":     "#f5efe0",
+    "accent":      "#8b6914",
+    "accent2":     "#5c3317",
+    "text":        "#1a1008",
+    "text_light":  "#5a4020",
+    "border":      "#8b6914",
+    "font_display": "Cinzel",
+    "font_body":   "Crimson Text"
+  }'
+);

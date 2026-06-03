@@ -15,9 +15,21 @@ export type Book = {
   cover_image_path: string
   status: 'active' | 'completed'
   completed_date: string | null
-  total_pages: number
-  current_page: number
+  format: 'print' | 'audiobook'
+  total_pages: number | null
+  total_minutes: number | null
+  current_page: number | null
   theme: BookTheme
+}
+
+// Format audiobook runtime (total minutes) as "Xh Ym".
+export function formatRuntime(totalMinutes: number | null): string {
+  if (!totalMinutes || totalMinutes <= 0) return ''
+  const h = Math.floor(totalMinutes / 60)
+  const m = totalMinutes % 60
+  if (h === 0) return `${m}m`
+  if (m === 0) return `${h}h`
+  return `${h}h ${m}m`
 }
 
 export type BookTheme = {
