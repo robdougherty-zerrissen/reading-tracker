@@ -6,13 +6,25 @@ import styles from '../styles/Completed.module.css'
 
 type Props = {
   completedBooks: Book[]
-  bookCount: number
+  totalBooks: number
+  printCount: number
   totalPages: number
   avgPagesPerDay: number
-  hoursListened: number
+  audioCount: number
+  totalMinutes: number
+  avgMinutesPerDay: number
 }
 
-export default function CompletedPage({ completedBooks, bookCount, totalPages, avgPagesPerDay, hoursListened }: Props) {
+export default function CompletedPage({
+  completedBooks,
+  totalBooks,
+  printCount,
+  totalPages,
+  avgPagesPerDay,
+  audioCount,
+  totalMinutes,
+  avgMinutesPerDay,
+}: Props) {
   return (
     <>
       <Head>
@@ -39,29 +51,42 @@ export default function CompletedPage({ completedBooks, bookCount, totalPages, a
         <main className={styles.main}>
           <div className={styles.contentWrapper}>
             <aside className={styles.statsPanel}>
-              <div className={styles.statItem}>
-                <span className={styles.statNumber}>{bookCount}</span>
+              <div className={styles.statTotal}>
+                <span className={`${styles.statNumber} ${styles.statNumberLg}`}>{totalBooks}</span>
                 <span className={styles.statLabel}>Books{'\n'}Completed</span>
               </div>
-              <div className={styles.statRule} />
-              <div className={styles.statItem}>
-                <span className={styles.statNumber}>{totalPages.toLocaleString()}</span>
-                <span className={styles.statLabel}>Total{'\n'}Pages</span>
+
+              <div className={styles.statGroup}>
+                <div className={styles.statGroupLabel}>Print</div>
+                <div className={styles.statItem}>
+                  <span className={styles.statNumber}>{printCount}</span>
+                  <span className={styles.statLabel}>Books</span>
+                </div>
+                <div className={styles.statItem}>
+                  <span className={styles.statNumber}>{totalPages.toLocaleString()}</span>
+                  <span className={styles.statLabel}>Total{'\n'}Pages</span>
+                </div>
+                <div className={styles.statItem}>
+                  <span className={styles.statNumber}>{avgPagesPerDay}</span>
+                  <span className={styles.statLabel}>Pages{'\n'}per Day</span>
+                </div>
               </div>
-              <div className={styles.statRule} />
-              <div className={styles.statItem}>
-                <span className={styles.statNumber}>{avgPagesPerDay}</span>
-                <span className={styles.statLabel}>Avg Pages{'\n'}per Day</span>
+
+              <div className={styles.statGroup}>
+                <div className={styles.statGroupLabel}>Audio</div>
+                <div className={styles.statItem}>
+                  <span className={styles.statNumber}>{audioCount}</span>
+                  <span className={styles.statLabel}>Audiobooks</span>
+                </div>
+                <div className={styles.statItem}>
+                  <span className={`${styles.statNumber} ${styles.statTime}`}>{formatRuntime(totalMinutes) || '0m'}</span>
+                  <span className={styles.statLabel}>Total{'\n'}Time</span>
+                </div>
+                <div className={styles.statItem}>
+                  <span className={styles.statNumber}>{avgMinutesPerDay}</span>
+                  <span className={styles.statLabel}>Min{'\n'}per Day</span>
+                </div>
               </div>
-              {hoursListened > 0 && (
-                <>
-                  <div className={styles.statRule} />
-                  <div className={styles.statItem}>
-                    <span className={styles.statNumber}>{hoursListened}</span>
-                    <span className={styles.statLabel}>Hours{'\n'}Listened</span>
-                  </div>
-                </>
-              )}
             </aside>
 
             <div className={styles.timelineArea}>
@@ -134,21 +159,35 @@ export const getServerSideProps: GetServerSideProps = async () => {
     .order('completed_date', { ascending: false })
 
   const books = completedBooks || []
-  const bookCount = books.length
+  const totalBooks = books.length
 
-  // Page stats count print books only; audiobooks contribute hours instead.
+  // Split by format: print contributes pages, audiobooks contribute minutes.
   const printBooks = books.filter((b) => b.format !== 'audiobook')
+  const audioBooks = books.filter((b) => b.format === 'audiobook')
+
+  const printCount = printBooks.length
   const totalPages = printBooks.reduce((sum, b) => sum + (b.total_pages || 0), 0)
-  const totalMinutes = books
-    .filter((b) => b.format === 'audiobook')
-    .reduce((sum, b) => sum + (b.total_minutes || 0), 0)
-  const hoursListened = Math.round(totalMinutes / 60)
+
+  const audioCount = audioBooks.length
+  const totalMinutes = audioBooks.reduce((sum, b) => sum + (b.total_minutes || 0), 0)
 
   const nashvilleToday = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Chicago' })
   const startOfYear = new Date('2026-01-01T00:00:00')
   const todayDate = new Date(nashvilleToday + 'T00:00:00')
   const daysElapsed = Math.floor((todayDate.getTime() - startOfYear.getTime()) / (1000 * 60 * 60 * 24)) + 1
   const avgPagesPerDay = daysElapsed > 0 ? Math.round(totalPages / daysElapsed) : 0
+  const avgMinutesPerDay = daysElapsed > 0 ? Math.round(totalMinutes / daysElapsed) : 0
 
-  return { props: { completedBooks: books, bookCount, totalPages, avgPagesPerDay, hoursListened } }
+  return {
+    props: {
+      completedBooks: books,
+      totalBooks,
+      printCount,
+      totalPages,
+      avgPagesPerDay,
+      audioCount,
+      totalMinutes,
+      avgMinutesPerDay,
+    },
+  }
 }
